@@ -1,45 +1,25 @@
 {
   "name": "anonymous-chat",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "engines": {
-    "node": "^20.19.0 || >=22.12.0"
-  },
+  "version": "1.0.0",
+  "description": "This template should help get you started developing with Vue 3 in Vite.",
+  "main": "index.js",
   "scripts": {
-    "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
-    "preview": "vite preview",
-    "dev:all": "concurrently -n CLIENT,SERVER -c auto \"npm:dev\" \"npm:dev:server\"",
-    "test:unit": "vitest",
-    "dev:server": "node server/index.js",  
-    "start": "node server/index.js",
-    "build-only": "vite build",
-    "type-check": "vue-tsc --build",
-    "format": "prettier --write src/"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unkn0wndo3s/anonymous-chat.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/unkn0wndo3s/anonymous-chat/issues"
+  },
+  "homepage": "https://github.com/unkn0wndo3s/anonymous-chat#readme",
   "dependencies": {
-    "concurrently": "^9.2.1",
+    "dotenv": "^17.2.2",
     "nanoid": "^5.1.5",
-    "pinia": "^3.0.3",
-    "vue": "^3.5.18",
-    "vue-router": "^4.5.1",
     "ws": "^8.18.3"
-  },
-  "devDependencies": {
-    "@tsconfig/node22": "^22.0.2",
-    "@types/jsdom": "^21.1.7",
-    "@types/node": "^22.16.5",
-    "@vitejs/plugin-vue": "^6.0.1",
-    "@vue/test-utils": "^2.4.6",
-    "@vue/tsconfig": "^0.7.0",
-    "jsdom": "^26.1.0",
-    "npm-run-all2": "^8.0.4",
-    "prettier": "3.6.2",
-    "typescript": "~5.8.0",
-    "vite": "^7.0.6",
-    "vite-plugin-vue-devtools": "^8.0.0",
-    "vitest": "^3.2.4",
-    "vue-tsc": "^3.0.4"
   }
 }
