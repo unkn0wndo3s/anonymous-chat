@@ -6,6 +6,8 @@ html,
 body,
 #app {
     height: 100%;
+    width: 100%;
+    overflow: hidden;
 }
 
 body {
@@ -108,6 +110,8 @@ section {
     gap: 8px;
     padding: 12px;
     border-top: 1px solid #222;
+    justify-content: center;
+    align-items: center;
 }
 
 textarea {
@@ -119,6 +123,7 @@ textarea {
     border: 1px solid #333;
     background: #0f1115;
     color: #eee;
+    min-width: 75%;
 }
 
 button[type="submit"] {
@@ -129,7 +134,16 @@ button[type="submit"] {
     color: #eee;
     cursor: pointer;
 }
-
+button[type="button"] {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    width: 3rem;
+    height: 3rem;
+    background: #1c2030;
+    color: #eee;
+    cursor: pointer;
+}
 .me {
     border-color: #2a5;
 }

@@ -18,13 +18,13 @@
         <MessagesList
           :messages="messages"
           ref="msgsRef"
-          :containerRef="msgsContainer"
         />
 
+        <!-- Input non désactivé : on bloque l'envoi dans onSubmit si WS pas connecté -->
         <ChatInput
-          :disabled="status !== 'connected'"
+          :disabled="false"
           @typing="sendTyping"
-          @submit="sendMessage"
+          @submit="onSubmit"
         />
       </section>
     </main>
@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useWsChat } from '../composables/useWsChat';
 import HeaderBar from '@/components/HeaderBar.vue';
 import UsersList from '@/components/UsersList.vue';
@@ -47,16 +47,33 @@ const {
   typers,
   messages,
   nameInput,
-  msgsContainer,
   connect,
   sendAuth,
   sendTyping,
   sendMessage,
+  sendFiles
 } = useWsChat();
+
+const msgsRef = ref<InstanceType<typeof MessagesList> | null>(null);
 
 function onConnectClick(): void {
   sendAuth();
 }
+
+// Reçoit { text, file? } de <ChatInput />
+async function onSubmit(payload: { text: string; files?: File[] }) {
+  const t = (payload.text || '').trim();
+  const fs = payload.files ?? [];
+
+  if (status.value !== 'connected') return;
+
+  if (fs.length) {
+    await sendFiles(fs, t);
+  } else if (t) {
+    sendMessage(t);
+  }
+}
+
 
 onMounted(() => {
   connect();
@@ -64,4 +81,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
+main { display: grid; grid-template-columns: 260px 1fr; gap: 1rem; }
+aside { border-right: 1px solid #333; padding-right: 1rem; }
+section { display: grid; grid-template-rows: 1fr auto; height: calc(100vh - 160px); gap: 0.5rem; }
 </style>
