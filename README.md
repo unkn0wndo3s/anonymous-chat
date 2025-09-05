@@ -1,39 +1,115 @@
-# anonymous-chat
+# Anonymous Chat (Vue + TypeScript + WebSocket)
 
-This template should help get you started developing with Vue 3 in Vite.
+A tiny, no-auth, ephemeral chat. All clients connect to the same Node.js WebSocket backend.  
+**Frontend:** Vue 3 + TypeScript (Vite).  
+**Backend:** single `index.js` using `ws`.
 
-## Recommended IDE Setup
+> ⚠️ By design this project runs **without CORS** for simplicity. You can enable CORS later if you want (notes below).
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+---
 
-## Type Support for `.vue` Imports in TS
+## Features
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+- Realtime chat over WebSocket (no DB, memory-only).
+- Typing indicators and message broadcast.
+- Zero auth; messages vanish on server restart.
 
-## Customize configuration
+---
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+## Repo Layout (branches)
 
-## Project Setup
+- **`main`** → frontend (Vue + TS)
+- **`backend`** → Node.js WebSocket server
 
-```sh
-npm install
+Clone once, then switch branches as needed.
+
+```bash
+git clone https://github.com/unkn0wndo3s/anonymous-chat anonymous-chat
+cd anonymous-chat
 ```
-
-### Compile and Hot-Reload for Development
-
-```sh
+## Requirements
+- Node.js ≥ 22.19 LTS (recommended)
+- npm (or yarn/pnpm if you prefer)
+---
+## TL;DR - Quick Start
+# 1) Start the backend (WebSocket server)
+```
+# from the repo root
+git checkout backend
+npm install
+node index.js
+# server listens on 8080 by default
+```
+# 2) Run the frontend (dev)
+```
+# new terminal
+git checkout main
+npm install
+npm run dev
+# Vite dev server (usually http://localhost:5173)
+```
+Open the dev URL, test chatting in two tabs
+---
+## Backend -- Details
+# Install & Run
+```
+git checkout backend
+npm install
+node index.js
+```
+# Production tip (optional)
+Use PM2 to keep it alive:
+```
+npm i -g pm2
+pm2 start index.js --name anon-chat-ws
+pm2 logs anon-chat-ws
+```
+---
+## Frontend - Details
+# Dev
+```
+git checkout main
+npm install
 npm run dev
 ```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
+# Build
+```
 npm run build
+# Output -> dist/
 ```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
+# Preview local build (optional)
 ```
+npm run preview
+```
+---
+## CORS (Optional)
+- The WebSocket server uses `ws` and by default doesn’t enforce CORS (WS handshakes are different from typical XHR/fetch CORS).
+- If you later add HTTP routes (REST) or want strict origins, add CORS middleware (e.g., `cors` package with Express) to your HTTP layer. For pure `ws`, restrict allowed origins manually in the upgrade handler.
+---
+## Scripts
+# Frontend (`main` branch):
+- `npm run dev` — Vite dev server
+- `npm run build` — production build
+- `npm run preview` — preview built app
+# Backend (backend branch):
+- `node index.js` — start server
+- (optional) `pm2 start index.js` — manage with PM2
+---
+## Troubleshooting
+- **Can’t connect to WS**
+  Check server port, and browser console errors.
+- **Port in use**
+  Change PORT for backend or Vite’s dev port (npm run dev -- --port 5174).
+- **Mixed content (HTTP vs HTTPS)**
+  If your site is served over HTTPS, your WS must be WSS.
+- **Nothing appears in Quick Start**
+  Make sure you’re on the correct branch:
+```
+git branch
+# switch if needed:
+git checkout backend   # for server
+git checkout main      # for frontend
+```
+## Notes
+- Messages are in-memory only. Restarting the server or closing every client connected to it clears everything.
+- No persistence by design. Keep it simple.
